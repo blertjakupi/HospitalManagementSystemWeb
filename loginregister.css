@@ -18,11 +18,13 @@ body
 
 .container
 {
+
     align-items: center;
     align-content: center;
-    margin: 50px;
-    margin-left: 450px;
+    margin: 50px auto;
+    max-width: 500px;
     width: 50%;
+    flex-grow: 0;
     background:#0a4d57;
     border-radius: 10px;
     padding: 90px 30px;
