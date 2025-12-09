@@ -295,7 +295,35 @@ nav a:hover{
 }
 
 /* !!!!! - Price - duhet me rregullu se diqka ka gabim*/
-
+.pricing .grid-3{
+    margin-top:24px;
+}
+.pricing .grid-3 li{
+    margin: 20px 0;
+}
+.pricing-card{
+    padding:24px;
+    text-align:left;
+}
+.pricing-price{
+    font-size:40px;
+    color:var(--primary);
+    font-weight:700;
+    margin-bottom:20px;
+}
+.pricing-btn{
+    background:var(--primary);
+    color:#fff;
+    padding:12px 24px;
+    border-radius:var(--radius);
+    border:0;
+    cursor:pointer;
+    width:100%;
+    margin-top: 20px;
+}
+.pricing-btn:hover{
+    background:var(--primary-dark);
+}
 
 /* Gallery */
 .gallery .grid-4{
