@@ -1,0 +1,143 @@
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial;
+}
+
+body
+{
+    background-color: #28a5b8;
+    background-repeat: no-repeat;
+    background-size: 1920px;
+}
+#registerID {
+    padding: 30px 30px;
+}
+
+.container
+{
+    align-items: center;
+    align-content: center;
+    margin: 50px;
+    margin-left: 450px;
+    width: 50%;
+    background:#0a4d57;
+    border-radius: 10px;
+    padding: 90px 30px;
+    box-shadow: 0 0 40px rgba(0,0,0, 0.9);
+}
+
+.container .login-text
+{
+    color: white;
+    font-weight: bold;
+    font-size: 25px;
+    text-align: center;
+    margin-bottom: 30px;
+    display: block;
+    text-transform: uppercase;
+}
+
+.container .login-email .input-group
+{
+    color: white;
+    width: 100%;
+    height: 50px;
+    margin-bottom: 25px;
+}
+
+.container .login-email .input-group input
+{
+    color: white;
+    width: 100%;
+    padding: 15px 20px;
+    height: 100%;
+    border: 3px solid white;
+    border-radius: 40px;
+    outline: none;
+    transition: 0.3s;
+    background: transparent;
+}
+
+.container .login-email .input-group input:focus,
+.container .login-email .input-group input:valid
+{
+    border-color: greenyellow;
+}
+
+.container .login-email .input-group .btn
+{
+    display: block;
+    width: 100%;
+    padding: 15px 20px;
+    text-align: center;
+    border: none;
+    outline: none;
+    background-color: white;
+    border-radius: 40px;
+    font-size: 15px;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.container .login-email .input-group .btn:hover
+{
+    color: white;
+    background-color: green;
+    transform: translateY(-5px);
+}
+
+.login-register-text
+{
+    color: white;
+    font-weight: 700;
+}
+
+.login-register-text a
+{
+    text-decoration: none;
+    color: green;
+}
+
+.login-register-text a:hover
+{
+    text-decoration: underline;
+    color: green;
+}
+
+
+/* Footer */
+footer{
+    background:#1f2d3d;
+    color:#ccc;
+    padding:32px 16px;
+}
+.footer-row{
+    max-width:1200px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:24px;
+    margin-bottom:24px;
+}
+.footer-row h4{
+    color:#fff;
+    margin-bottom:12px;
+}
+.footer-row ul{
+    list-style:none;
+}
+.footer-row a{
+    color:#ccc;
+    text-decoration:none;
+}
+.footer-bottom{
+    text-align:center;
+    border-top:1px solid rgba(255,255,255,.06);padding-top:24px;
+    font-size:14.4px;
+    color:#999;
+}
