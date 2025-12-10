@@ -64,8 +64,8 @@ html,body
 /* Header */
 header
 {
-    background:var(--primary);
-    color:#fff;
+    background:#fff;
+    color:var(--primary);
     position:sticky;
     top:0;
     z-index:100;
@@ -86,16 +86,15 @@ header
     font-weight:700;
     font-size:18px;
 }
-.brand .logo-box
+.brand .logo-box img
 {
-    width:40px;
-    height:40px;
+    width:45px;
+    height:45px;
     border-radius:var(--radius);
-    background:rgba(255,255,255,.25);
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:12px;
+   
 }
 nav
 {
@@ -105,7 +104,7 @@ nav
 }
 nav a
 {
-    color:#fff;
+    color:var(--primary);
     text-decoration:none;
     font-size:14.4px;
     white-space:nowrap;
@@ -158,14 +157,13 @@ nav a:hover{
 }
 
 /* Placeholder*/
-.placeholder{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:var(--radius);background:linear-gradient(135deg,#e8f4f8,#d0e8f0);
-    color:var(--primary);
-    border:2px dashed rgba(0,0,0,.04);
+.placeholder img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
+
 .h-400{
     height:400px;
 }
@@ -173,7 +171,7 @@ nav a:hover{
     height:350px;
 }
 .h-300{
-    height:300px;
+    height:350px;
 }
 .h-280{
     height:280px;
@@ -193,8 +191,13 @@ nav a:hover{
 
 /* Cards, boxes */
 .card{
-    background:var(--surface)
-    ;border-radius:var(--radius);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background:var(--surface);
+    border-radius:var(--radius);
     box-shadow:0 2px 8px rgba(0,0,0,.04);
     padding:24px;
 }
@@ -224,8 +227,13 @@ nav a:hover{
     margin-top:24px;
 }
 .feature-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align:center;
     padding:24px;
+    gap: 12px;
 }
 
 /* Team */
@@ -269,9 +277,14 @@ nav a:hover{
     margin-top:24px;
 }
 .department-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align:center;
     padding:24px;
     cursor:pointer;
+    gap: 12px;
 }
 .department-icon{
     width:70px;
