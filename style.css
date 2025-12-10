@@ -338,16 +338,46 @@ nav a:hover{
 .pricing .grid-3 li{
     margin: 20px 0;
 }
-.pricing-card{
-    padding:24px;
-    text-align:left;
+.pricing-card {
+    background: #fff;
+    padding: 40px 30px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
-.pricing-price{
-    font-size:40px;
-    color:var(--primary);
-    font-weight:700;
-    margin-bottom:20px;
+
+.pricing-card h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
 }
+
+.pricing-price {
+    font-size: 56px;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.pricing-period {
+    color: var(--muted);
+    margin-bottom: 30px;
+}
+
+.pricing-features {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.pricing-features li {
+    padding: 10px 0;
+}
+
+.pricing-features li::before {
+    color: var(--primary);
+    font-weight: bold;
+}
+
 .pricing-btn{
     background:var(--primary);
     color:#fff;
