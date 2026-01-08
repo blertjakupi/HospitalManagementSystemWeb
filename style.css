@@ -277,6 +277,82 @@ nav a:hover{
     padding:24px;
     text-align:center;
 }
+.team .team-slider {
+    position: relative;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.team .slider-track {
+    display: flex;
+    gap: 24px;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+}
+
+.team .card {
+    flex: 0 0 calc(33.333% - 16px); 
+    overflow: hidden;
+    padding: 0;
+    min-width: 0; 
+}
+
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    color: var(--text);
+}
+
+.slider-btn:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+}
+
+.slider-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: translateY(-50%) scale(0.9) !important;
+}
+
+.slider-prev { left: 0; }
+.slider-next { right: 0; }
+
+.slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 32px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background: var(--primary, #3498db);
+    transform: scale(1.2);
+}
+
 
 /* Services, departments */
 .services .service-row{
