@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const loginForm = document.getElementById("loginForm");
     const registerForm = document.getElementById("registerForm");
-
+    const appointmentForm = document.getElementById("appointmentForm");
    
     if (loginForm) {
         const errorBox = document.getElementById("formError");
@@ -110,6 +110,70 @@ document.addEventListener("DOMContentLoaded", function () {
         if (dotPosition < atPosition) return false;
 
         return true;
+    }
+
+      if (appointmentForm) {
+        const errorBox = document.getElementById("formError");
+
+        appointmentForm.addEventListener("submit", function (e) {
+            errorBox.textContent = "";
+
+            const fullname = appointmentForm.fullname.value.trim();
+            const email = appointmentForm.email.value.trim();
+            const phone = appointmentForm.phone.value.trim();
+            const doctor = appointmentForm.doctor.value.trim();
+            const dateValue = appointmentForm.date.value.trim();
+            const time = appointmentForm.time.value.trim();
+            const symptoms = appointmentForm.symptoms.value.trim();
+
+
+            if (fullname === "" || email === "" || phone === "" || doctor === "" || dateValue === "" || time === "" || symptoms === "") {
+                showError("Ju lutem plotësoni të gjitha fushat!");
+                e.preventDefault();
+                return;
+            }
+
+            
+            if (!validateEmail(email)) {
+                showError("Email nuk është valid!");
+                e.preventDefault();
+                return;
+            }
+
+            
+            const phoneRegex = /^[\d\+\-\(\)\s]+$/;
+
+            if (!phoneRegex.test(phone)) {
+                showError("Numri i telefonit përmban karaktere të palejuara!");
+                e.preventDefault();
+                return;
+            }
+
+            if (phone.length < 6) {
+                showError("Numri i telefonit duhet të ketë së paku 6 shifra!");
+                e.preventDefault();
+                return;
+            }
+
+            
+            const selectedDate = new Date(dateValue.replace(/-/g, '\/'));
+            
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (selectedDate < today) {
+                showError("Nuk mund të caktoni termin në një datë të kaluar!");
+                e.preventDefault();
+                return;
+            }
+
+            
+        });
+
+        function showError(msg) {
+            errorBox.textContent = msg;
+        }
     }
 
 });

@@ -30,38 +30,41 @@
     </header>
 
     <section class="section appointment">
-        <div class="container text-center">
+    <div class="container text-center">
 
-            <h2 class="title">Cakto një Termin</h2>
-            <p class="subtitle">Plotesoni formularin e mëposhtëm për të planifikuar vizitën tuaj</p>
+        <h2 class="title">Cakto një Termin</h2>
+        <p class="subtitle">Plotesoni formularin e mëposhtëm për të planifikuar vizitën tuaj</p>
 
-            <form class="form">
+        
+        <form class="form" id="appointmentForm">
+            
+            <p id="formError" class="error-message" style="color: red; margin-bottom: 10px;"></p>
 
-                <div class="row">
-                    <input type="text" placeholder="Emri i plotë">
-                    <input type="email" placeholder="Email Adresa">
-                </div>
+            <div class="row">
+                <input type="text" name="fullname" placeholder="Emri i plotë">
+                <input type="email" name="email" placeholder="Email Adresa">
+            </div>
 
-                <div class="row">
-                    <input type="tel" placeholder="Nr. Telefonit">
-                    <input type="text" placeholder="Mjeku i Preferuar">
-                </div>
+            <div class="row">
+                <input type="tel" name="phone" placeholder="Nr. Telefonit">
+                <input type="text" name="doctor" placeholder="Mjeku i Preferuar">
+            </div>
 
-                <div class="row">
-                    <input type="date" placeholder="Cakto Datën">
-                    <input type="time" placeholder="Cakto Kohën">
-                </div>
+            <div class="row">
+                <input type="date" name="date" placeholder="Cakto Datën">
+                <input type="time" name="time" placeholder="Cakto Kohën">
+            </div>
 
-                <div class="row full">
-                    <textarea placeholder="Përshkruaj simptomat tuaja" rows="5"></textarea>
-                </div>
+            <div class="row full">
+                <textarea name="symptoms" placeholder="Përshkruaj simptomat tuaja" rows="5"></textarea>
+            </div>
 
-                <button type="submit" class="btn-appointment">Rezervo Terminin</button>
+            <button type="submit" class="btn-appointment">Rezervo Terminin</button>
 
-            </form>
+        </form>
 
-        </div>
-    </section>
+    </div>
+</section>
 
     <footer>
         <div class="footer-row">
@@ -113,5 +116,6 @@
         </div>
     </footer>
     <script src="script.js"></script>
+    <script src="validimet.js"></script>
 </body>
 </html>
