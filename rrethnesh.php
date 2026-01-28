@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- duhet me rregullu style.css per krejt imazhet -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical - Health Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container header-row">
+            <div class="brand">
+                <div class="logo-box"><img src="Library/Logo.png" alt="logo"></div>
+            </div>
+             <button class="hamburger" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav>
+                <a href="index.php">Ballina</a>
+                <a href="rrethnesh.php">Rreth Nesh</a>
+                <a href="galeria.php">Galeria</a>
+                <a href="cmimet.php">Çmimet</a>
+                <a href="terminet.php">Terminet</a>
+                <a href="login.php">Kyçu</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="section about">
+        <div class="container">
+
+            <div class="grid grid-2">
+
+                <!-- Me vendos nje foto ne anen e majte... -->
+                <div>
+                    <div class="placeholder h-300"><img src="Library/9.jpg" alt=""></div>
+                </div>
+
+                <div>
+                    <h2 class="title">Rreth Qendrës sonë Mjekësore</h2>
+                    <p class="subtitle">>Ofrojmë shërbime të kujdesit shëndetësor me cilësi të lartë për çdo pacient</p>
+
+                    <p>
+                        Qendra jonë mjekësore është e përkushtuar të ofrojë shërbime të jashtëzakonshme shëndetësore, duke kombinuar teknologjinë e avancuar, stafin profesional dhe një qasje të ndjeshme ndaj pacientit.
+                    </p>
+
+                    <p>
+                        Ne fokusohemi në kujdesin e orientuar drejt pacientit, duke siguruar rehati, siguri dhe kënaqësi në çdo hap të udhëtimit tuaj shëndetësor.
+                    </p>
+
+                    <ul class="about-list">
+                        <li>✔ Mjekë me përvojë dhe të certifikuar</li>
+                        <li>✔ Pajisje moderne mjekësore</li>
+                        <li>✔ Shërbime emergjente 24/7</li>
+                        <li>✔ Shërbime të plota diagnostike dhe laboratorike</li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section class="section values">
+        <div class="container text-center">
+
+            <h2 class="title">Vlerat Tona</h2>
+            <p class="subtitle">Çfarë na bën një ofrues të besueshëm shëndetësor?</p>
+
+            <div class="grid grid-3">
+                <div class="card card-hover">
+                    <div class="icon-box">❤️</div>
+                    <h3>Mirësia</h3>
+                    <p class="text-muted">Ne trajtojmë çdo pacient me empati dhe respekt.</p>
+                </div>
+
+                <div class="card card-hover">
+                    <div class="icon-box">🏥</div>
+                    <h3>Ekselencë</h3>
+                    <p class="text-muted">Ne përdorim metoda moderne dhe ruajmë standarde të larta.</p>
+                </div>
+
+                <div class="card card-hover">
+                   <div class="icon-box">🤝</div>
+                   <h3>Besimi</h3>
+                    <p class="text-muted">Ne ndërtojmë marrëdhënie të forta me pacientët tanë.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <footer>
+        <div class="footer-row">
+
+            <div>
+                <h4>Rreth Kompanise</h4>
+                <ul>
+                    <li><a href="rrethnesh.php">Rreth nesh</a></li>
+                    <li><a href="galeria.php">Foto</a></li>
+                    <li><a href="cmimet.php">Cmimet</a></li>
+                    <li><a href="terminet.php">Cakto Termin</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Serviset</a></li>
+                    <li><a href="#">Departamentet</a></li>
+                    <li><a href="#">Doktoret</a></li>
+                    <li><a href="#">Kontakt</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4>Orari i punës</h4>
+                <ul>
+                    <li>Mon - Fri: 9:00 AM - 6:00 PM</li>
+                    <li>Sat: 10:00 AM - 4:00 PM</li>
+                    <li>Sun: Vetem emergjencat</li>
+                    <li>24/7 Emergency</li>
+                </ul>
+            </div>
+
+            <div>
+                <h4>Mediat Sociale</h4>
+                <div class="social-links">
+                    <a href="facebook.com">Facebook</a>
+                    <a href="twitter.com">X</a>
+                    <a href="linkedin.com">LinkedIn</a>
+                    <a href="instagram.com">Instagram</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 WEB UBT. All rights reserved. | Privacy Policy | Terms & Conditions| </p>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>
