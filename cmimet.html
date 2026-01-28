@@ -33,7 +33,7 @@
 <section class="pricing section">
         <div class="container text-center">
 
-            <h2 class="title">Cmimet tona</h2>
+            <h2 class="title">Çmimet tona</h2>
             <p class="subtitle">Zgjidhni planin më të mirë për nevojat tuaja mjekësore</p>
 
             <div class="grid grid-3">
