@@ -56,5 +56,50 @@ class User {
     public function isAdmin() {
         return isset($_SESSION['role']) && $_SESSION['role'] == 'admin';
     }
+
+    public function readAll() {
+        $query = "SELECT * FROM " . $this->table_name;
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    public function delete($id) {
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
+
+    public function readOne() {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE id = ? LIMIT 0,1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->id);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($row) {
+            $this->perdoruesi = $row['perdoruesi'];
+            $this->email = $row['email'];
+            $this->role = $row['role'];
+            return true;
+        }
+        return false;
+    }
+
+    public function update() {
+        $query = "UPDATE " . $this->table_name . "
+                  SET perdoruesi = :perdoruesi, email = :email, role = :role
+                  WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':perdoruesi', $this->perdoruesi);
+        $stmt->bindParam(':email', $this->email);
+        $stmt->bindParam(':role', $this->role);
+        $stmt->bindParam(':id', $this->id);
+
+        return $stmt->execute();
+    }
 }
 ?>
