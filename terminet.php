@@ -1,3 +1,32 @@
+<?php
+session_start();
+require_once 'classes/Database.php';
+require_once 'classes/Terminet.php';
+
+$database = new Database();
+$db = $database ->getConnection();
+
+$message = '';
+if ($_POST) {
+    $termin = new Terminet($db);
+    
+    $termin->fullname = $_POST['fullname'];
+    $termin->email = $_POST['email'];
+    $termin->phone = $_POST['phone'] ?? '';
+    $termin->doctor = $_POST['doctor'];
+    $termin->appointment_date = $_POST['date'];
+    $termin->appointment_time = $_POST['time'];
+    $termin->symptoms = $_POST['symptoms'];
+    
+    if ($termin->create()) {
+        $message = "Termini u ruajt me sukses!";
+        $_POST = [];
+    } else {
+        $message = "Gabim gjatë ruajtjes";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +53,12 @@
                 <a href="galeria.php">Galeria</a>
                 <a href="cmimet.php">Çmimet</a>
                 <a href="terminet.php">Terminet</a>
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <a href="dashboard.php">Dashboard</a>
+                    <a href="logout.php">Dil</a>
+                <?php else: ?>
                 <a href="login.php">Kyçu</a>
+                <?php endif; ?>
             </nav>
         </div>
     </header>
@@ -35,28 +69,37 @@
         <h2 class="title">Cakto një Termin</h2>
         <p class="subtitle">Plotesoni formularin e mëposhtëm për të planifikuar vizitën tuaj</p>
 
+        <?php if($message): ?>
+        <div style="padding:15px; margin:20px 0; background:#d4edda; color:#155724; border:1px solid green; border-radius:8px;">
+            <?= $message ?>
+        </div>
+    <?php endif; ?>
         
-        <form class="form" id="appointmentForm">
-            
-            <p id="formError" class="error-message" style="color: red; margin-bottom: 10px;"></p>
+        <form class="form" id="appointmentForm" method="POST">
 
             <div class="row">
-                <input type="text" name="fullname" placeholder="Emri i plotë">
-                <input type="email" name="email" placeholder="Email Adresa">
+                <input type="text" name="fullname" placeholder="Emri i plotë" required>
+                <input type="email" name="email" placeholder="Email Adresa" required>
             </div>
 
             <div class="row">
                 <input type="tel" name="phone" placeholder="Nr. Telefonit">
-                <input type="text" name="doctor" placeholder="Mjeku i Preferuar">
+                <select name="doctor" required>
+                    <option value="">Zgjidh Doktorin</option>
+                    <option>Nazmi Kolgeci - Mjek Përgjithshëm</option>
+                    <option>Dr. Sara Gashi - Dentiste</option>
+                    <option>Dr. Besnik Krasniqi - Ortoped</option>
+                    <option>Dr. Ahmed Morina - Pediatër</option>
+                </select>
             </div>
 
             <div class="row">
-                <input type="date" name="date" placeholder="Cakto Datën">
-                <input type="time" name="time" placeholder="Cakto Kohën">
+                <input type="date" name="date" required min="<?= date('Y-m-d') ?>">
+                <input type="time" name="time" required>
             </div>
 
             <div class="row full">
-                <textarea name="symptoms" placeholder="Përshkruaj simptomat tuaja" rows="5"></textarea>
+                <textarea name="symptoms" placeholder="Përshkruaj simptomat tuaja" rows="5" required></textarea>
             </div>
 
             <button type="submit" class="btn-appointment">Rezervo Terminin</button>
@@ -115,7 +158,8 @@
             <p>&copy; 2025 WEB UBT. All rights reserved. | Privacy Policy | Terms & Conditions| </p>
         </div>
     </footer>
-    <script src="script.js"></script>
+    <script src="script.js"></script>    
     <script src="validimet.js"></script>
+
 </body>
 </html>
