@@ -8,23 +8,45 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <?php
+        if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    $isLoggedIn = isset($_SESSION['user_id']);
+    $isAdmin = $isLoggedIn && isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+    ?>
+
     <header>
-        <div class="container header-row">
+        <div class="header-container header-row">
             <div class="brand">
-                <div class="logo-box"><img src="Library/Logo.png" alt="logo"></div>
+                <div class="logo-box">
+                    <img src="Library/Logo.png" alt="logo">
+                </div>
             </div>
-             <button class="hamburger" aria-label="Menu">
+
+            <button class="hamburger" aria-label="Menu">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
+
             <nav>
                 <a href="index.php">Ballina</a>
                 <a href="rrethnesh.php">Rreth Nesh</a>
                 <a href="galeria.php">Galeria</a>
                 <a href="cmimet.php">Çmimet</a>
                 <a href="terminet.php">Terminet</a>
-                <a href="login.php">Kyçu</a>
+
+                <?php if ($isAdmin): ?>
+                    <a href="dashboard.php">Dashboard</a>
+                <?php endif; ?>
+
+                <?php if ($isLoggedIn): ?>
+                    <a href="logout.php">Dil</a>
+                <?php else: ?>
+                    <a href="login.php">Kyçu</a>
+                <?php endif; ?>
             </nav>
         </div>
     </header>
