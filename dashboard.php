@@ -6,6 +6,8 @@ if (session_status() === PHP_SESSION_NONE) {
 include_once __DIR__ . '/Classes/Database.php';
 include_once __DIR__ . '/Classes/User.php';
 include_once __DIR__ . '/Classes/Terminet.php';
+include_once __DIR__ . '/Classes/Abonimet.php';
+
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header("Location: login.php");
@@ -16,6 +18,7 @@ $database = new Database();
 $db = $database->getConnection();
 $user = new User($db);
 $terminet = new Terminet($db);
+$abonimet = new Abonimet($db);
 
 
 
@@ -69,6 +72,31 @@ if (isset($_GET['edit_termin'])) {
     $edit_termin = $terminet;
 }
 
+if (isset($_GET['delete_abonim'])) {
+    $abonimet->id = $_GET['delete_abonim'];
+    $abonimet->delete($_GET['delete_abonim']);
+    header("Location: dashboard.php?tab=abonimet");
+    exit;
+}
+
+$edit_abonim = null;
+if (isset($_GET['edit_abonim'])) {
+    $abonimet->id = $_GET['edit_abonim'];
+    $abonimet->readOne();
+    $edit_abonim = $abonimet;
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_abonim'])) {
+    $abonimet->id = $_POST['abonim_id'];
+    $abonimet->pako = $_POST['pako'];
+    $abonimet->cmimi = $_POST['cmimi'];
+    $abonimet->status = $_POST['status'];
+
+    if ($abonimet->update()) {
+        $msg = "Subscription updated successfully!";
+    }
+}
+
 $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'users';
 ?>
 
@@ -112,6 +140,7 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'users';
         <h2>Admin Panel</h2>
         <a href="?tab=users" class="<?php echo $active_tab == 'users' ? 'active' : ''; ?>">Users</a>
         <a href="?tab=appointments" class="<?php echo $active_tab == 'appointments' ? 'active' : ''; ?>">Appointments</a>
+        <a href="?tab=abonimet" class="<?php echo $active_tab == 'abonimet' ? 'active' : ''; ?>">Subscriptions</a>
         <a href="index.php">Back to Home</a>
         <a href="logout.php" style="color: #dc3545; margin-top: 40px;">Logout</a>
     </div>
@@ -183,6 +212,33 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'users';
             </form>
         </div>
         <?php endif; ?>
+        <?php if ($edit_abonim): ?>
+        <div class="edit-form-container">
+            <h3>Edit Subscription</h3>
+            <form method="POST" action="dashboard.php?tab=abonimet">
+                <input type="hidden" name="abonim_id" value="<?php echo $edit_abonim->id; ?>">
+                <div class="form-group">
+                    <label>Package</label>
+                    <input type="text" name="pako" value="<?php echo $edit_abonim->pako; ?>" required>
+                </div>
+                <div class="form-group">
+                    <label>Price</label>
+                    <input type="number" step="0.01" name="cmimi" value="<?php echo $edit_abonim->cmimi; ?>" required>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select name="status">
+                        <option value="aktiv" <?php echo $edit_abonim->status == 'aktiv' ? 'selected' : ''; ?>>Active</option>
+                        <option value="skaduar" <?php echo $edit_abonim->status == 'skaduar' ? 'selected' : ''; ?>>Expired</option>
+                        <option value="anuluar" <?php echo $edit_abonim->status == 'anuluar' ? 'selected' : ''; ?>>Canceled</option>
+                    </select>
+                </div>
+                <button type="submit" name="update_abonim" class="btn-save">Save Changes</button>
+                <a href="dashboard.php?tab=abonimet" class="btn-cancel">Cancel</a>
+            </form>
+        </div>
+        <?php endif; ?>
+
 
 
         <?php if ($active_tab == 'users' && !$edit_user): ?>
@@ -258,6 +314,42 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'users';
                 </table>
             </div>
         <?php endif; ?>
+        <?php if ($active_tab == 'abonimet' && !$edit_abonim): ?>
+            <h1>Manage Subscriptions</h1>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>User ID</th>
+                            <th>Package</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $stmt = $abonimet->readAll();
+                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                            echo "<tr>";
+                            echo "<td>{$row['id']}</td>";
+                            echo "<td>{$row['user_id']}</td>";
+                            echo "<td>{$row['pako']}</td>";
+                            echo "<td>{$row['cmimi']}</td>";
+                            echo "<td>{$row['status']}</td>";
+                            echo "<td>";
+                            echo "<a href='?tab=abonimet&edit_abonim={$row['id']}' class='btn-edit'>Edit</a>";
+                            echo "<a href='?delete_abonim={$row['id']}' class='btn-delete' onclick='return confirm(\"Are you sure?\")'>Delete</a>";
+                            echo "</td>";
+                            echo "</tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php endif; ?>
+
 
     </div>
 </div>

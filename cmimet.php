@@ -1,3 +1,39 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+require_once 'classes/Database.php';
+require_once 'classes/Abonimet.php';
+
+$message = '';
+$error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_SESSION['user_id'])) {
+        $error = 'Duhet të jeni të kyçur për të zgjedhur një plan.';
+    } else {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $abonim = new Abonimet($db);
+        $abonim->user_id = $_SESSION['user_id'];
+        $abonim->pako = $_POST['pako'];
+        $abonim->cmimi = $_POST['cmimi'];
+        $abonim->status = 'aktiv';
+
+        if ($abonim->hasActiveSubscription()) {
+                $error = 'Ju tashmë keni një abonim aktiv.';
+        } else {
+            if ($abonim->create()) {
+                  $message = 'U abonuat me sukses në planin e zgjedhur.';
+             } else {
+                    $error = 'Ndodhi një gabim. Ju lutem provoni përsëri.';
+             }
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,7 +88,40 @@
     </header>
 
 
-<section class="pricing section">
+    <section class="pricing section">
+                <?php if ($error): ?>
+                    <div style="
+                        text-align:center;
+                        font-size:1.2rem;
+                        margin:20px auto;
+                        padding:10px 15px;
+                        border-radius:5px;
+                        width:fit-content;
+                        color:#721c24;
+                        background-color:#f8d7da;
+                        border:1px solid #f5c6cb;
+                    ">
+                <?= htmlspecialchars($error) ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($message): ?>
+                    <div style="
+                        text-align:center;
+                        font-size:1.2rem;
+                        margin:20px auto;
+                        padding:10px 15px;
+                        border-radius:5px;
+                        width:fit-content;
+                        color:#155724;
+                        background-color:#d4edda;
+                        border:1px solid #c3e6cb;
+                    ">
+                        <?= htmlspecialchars($message) ?>
+                    </div>
+                <?php endif; ?>
+
+
         <div class="container text-center">
 
             <h2 class="title">Çmimet tona</h2>
@@ -71,7 +140,11 @@
                 <li>✔ 24/7 Support</li>
                 <li>✖ Vizita nga specialistët</li>
             </ul>
-            <button class="pricing-btn">Zgjedh Planin</button>
+            <form method="POST">
+                <input type="hidden" name="pako" value="Pako Bazike">
+                <input type="hidden" name="cmimi" value="50">
+                <button type="submit" class="pricing-btn">Zgjedh Planin</button>
+            </form>
         </div>
 
                 <!-- Card 2 -->
@@ -85,7 +158,11 @@
                 <li>✔ Vizita nga Specialistët</li>
                 <li>✔ Support me prioritet</li>
             </ul>
-            <button class="pricing-btn">Zgjedh Planin</button>
+            <form method="POST">
+                <input type="hidden" name="pako" value="Pako e Avancuar">
+                <input type="hidden" name="cmimi" value="79">
+                <button type="submit" class="pricing-btn">Zgjedh Planin</button>
+            </form>
         </div>
 
                 <!-- Card 3 -->
@@ -99,7 +176,11 @@
                 <li>✔ Trajtim VIP</li>
                 <li>✔ Vizita nga specialistët</li>
             </ul>
-            <button class="pricing-btn">Zgjedh Planin</button>
+            <form method="POST">
+                <input type="hidden" name="pako" value="Pako Premium">
+                <input type="hidden" name="cmimi" value="129">
+                <button type="submit" class="pricing-btn">Zgjedh Planin</button>
+            </form>
         </div>
 
             </div>
