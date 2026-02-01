@@ -7,6 +7,9 @@ include_once __DIR__ . '/Classes/Database.php';
 include_once __DIR__ . '/Classes/User.php';
 include_once __DIR__ . '/Classes/Terminet.php';
 include_once __DIR__ . '/Classes/Abonimet.php';
+include_once __DIR__ . '/Classes/Doktoret.php';
+
+
 
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
@@ -19,6 +22,7 @@ $db = $database->getConnection();
 $user = new User($db);
 $terminet = new Terminet($db);
 $abonimet = new Abonimet($db);
+$doktoret = new Doktoret($db);
 
 
 
@@ -97,6 +101,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_abonim'])) {
     }
 }
 
+if (isset($_GET['delete_doktor'])) {
+    $doktoret->id = $_GET['delete_doktor'];
+    $doktoret->delete();
+    header("Location: dashboard.php?tab=doktoret");
+    exit;
+}
+
+$edit_doktor = null;
+if (isset($_GET['edit_doktor'])) {
+    $doktoret->id = $_GET['edit_doktor'];
+    $doktoret->readOne();
+    $edit_doktor = $doktoret;
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_doktor'])) {
+    $doktoret->id = $_POST['doktor_id'];
+    $doktoret->emri = $_POST['emri'];
+    $doktoret->mbiemri = $_POST['mbiemri'];
+    $doktoret->specializimi = $_POST['specializimi'];
+    $doktoret->email = $_POST['email'];
+    $doktoret->telefoni = $_POST['telefoni'];
+
+    if ($doktoret->update()) {
+        $msg = "Doctor updated successfully!";
+    }
+}
+$add_doktor = isset($_GET['add_doktor']) ? true : false;
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_doktor'])) {
+    $doktoret->emri = $_POST['emri'];
+    $doktoret->mbiemri = $_POST['mbiemri'];
+    $doktoret->specializimi = $_POST['specializimi'];
+    $doktoret->email = $_POST['email'];
+    $doktoret->telefoni = $_POST['telefoni'];
+
+    if ($doktoret->createFromDashboard()) {
+        $msg = "Doctor added successfully!";
+        header("Location: dashboard.php?tab=doktoret");
+        exit;
+    } else {
+        $msg = "Error adding doctor.";
+    }
+}
+
 $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'users';
 ?>
 
@@ -141,6 +189,7 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'users';
         <a href="?tab=users" class="<?php echo $active_tab == 'users' ? 'active' : ''; ?>">Users</a>
         <a href="?tab=appointments" class="<?php echo $active_tab == 'appointments' ? 'active' : ''; ?>">Appointments</a>
         <a href="?tab=abonimet" class="<?php echo $active_tab == 'abonimet' ? 'active' : ''; ?>">Subscriptions</a>
+        <a href="?tab=doktoret" class="<?php echo $active_tab == 'doktoret' ? 'active' : ''; ?>">Doctors</a>
         <a href="index.php">Back to Home</a>
         <a href="logout.php" style="color: #dc3545; margin-top: 40px;">Logout</a>
     </div>
@@ -238,6 +287,37 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'users';
             </form>
         </div>
         <?php endif; ?>
+
+        <?php if ($edit_doktor): ?>
+<div class="edit-form-container">
+    <h3>Edit Doctor</h3>
+    <form method="POST" action="dashboard.php?tab=doktoret">
+        <input type="hidden" name="doktor_id" value="<?php echo $edit_doktor->id; ?>">
+        <div class="form-group">
+            <label>First Name</label>
+            <input type="text" name="emri" value="<?php echo $edit_doktor->emri; ?>" required>
+        </div>
+        <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" name="mbiemri" value="<?php echo $edit_doktor->mbiemri; ?>" required>
+        </div>
+        <div class="form-group">
+            <label>Specialization</label>
+            <input type="text" name="specializimi" value="<?php echo $edit_doktor->specializimi; ?>" required>
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" value="<?php echo $edit_doktor->email; ?>" required>
+        </div>
+        <div class="form-group">
+            <label>Phone</label>
+            <input type="text" name="telefoni" value="<?php echo $edit_doktor->telefoni; ?>">
+        </div>
+        <button type="submit" name="update_doktor" class="btn-save">Save Changes</button>
+        <a href="dashboard.php?tab=doktoret" class="btn-cancel">Cancel</a>
+    </form>
+</div>
+<?php endif; ?>
 
 
 
@@ -349,6 +429,77 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'users';
                 </table>
             </div>
             <?php endif; ?>
+
+                        <?php if ($active_tab == 'doktoret' && !$edit_doktor): ?>
+                <h1>Manage Doctors</h1>
+                <a href="?tab=add_doktor" class="btn-save" style="margin-bottom: 20px; display: inline-block;">Add New Doctor</a>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Specialization</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $stmt = $doktoret->read();
+                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                echo "<tr>";
+                                echo "<td>{$row['id']}</td>";
+                                echo "<td>{$row['emri']}</td>";
+                                echo "<td>{$row['mbiemri']}</td>";
+                                echo "<td>{$row['specializimi']}</td>";
+                                echo "<td>{$row['email']}</td>";
+                                echo "<td>{$row['telefoni']}</td>";
+                                echo "<td>";
+                                echo "<a href='?tab=doktoret&edit_doktor={$row['id']}' class='btn-edit'>Edit</a>";
+                                echo "<a href='?delete_doktor={$row['id']}' class='btn-delete' onclick='return confirm(\"Are you sure?\")'>Delete</a>";
+                                echo "</td>";
+                                echo "</tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($active_tab == 'add_doktor'): ?>
+                    <h1>Add New Doctor</h1>
+                    <div class="edit-form-container" style="max-width: 600px; margin: auto;">
+                        <form method="POST" action="dashboard.php?tab=add_doktor">
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" name="emri" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" name="mbiemri" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Specialization</label>
+                                <input type="text" name="specializimi" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="text" name="telefoni">
+                            </div>
+                            <button type="submit" name="create_doktor" class="btn-save">Add Doctor</button>
+                            <a href="dashboard.php?tab=doktoret" class="btn-cancel">Cancel</a>
+                        </form>
+                    </div>
+            <?php endif; ?>
+
+
 
 
     </div>
