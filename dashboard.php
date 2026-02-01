@@ -8,7 +8,7 @@ include_once __DIR__ . '/Classes/User.php';
 include_once __DIR__ . '/Classes/Terminet.php';
 include_once __DIR__ . '/Classes/Abonimet.php';
 include_once __DIR__ . '/Classes/Doktoret.php';
-
+include_once __DIR__ . '/Classes/Medikamentet.php';
 
 
 
@@ -23,6 +23,7 @@ $user = new User($db);
 $terminet = new Terminet($db);
 $abonimet = new Abonimet($db);
 $doktoret = new Doktoret($db);
+$medikamentet = new Medikamentet($db);
 
 
 
@@ -146,6 +147,47 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_doktor'])) {
 }
 
 $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'users';
+
+
+if (isset($_GET['delete_medikament'])) {
+    $medikamentet->id = $_GET['delete_medikament'];
+    $medikamentet->delete();
+    header("Location: dashboard.php?tab=medikamentet");
+    exit;
+}
+
+$edit_medikament = null;
+if (isset($_GET['edit_medikament'])) {
+    $medikamentet->id = $_GET['edit_medikament'];
+    $medikamentet->readOne();
+    $edit_medikament = $medikamentet;
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_medikament'])) {
+    $medikamentet->id = $_POST['medikament_id'];
+    $medikamentet->emri = $_POST['emri'];
+    $medikamentet->doza = $_POST['doza'];
+    $medikamentet->cmimi = $_POST['cmimi'];
+    $medikamentet->pershkrimi = $_POST['pershkrimi'];
+    
+    if ($medikamentet->update()) {
+        $msg = "Medikamenti u përditësua!";
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_medikament'])) {
+    $medikamentet->emri = $_POST['emri'];
+    $medikamentet->doza = $_POST['doza'];
+    $medikamentet->cmimi = $_POST['cmimi'];
+    $medikamentet->pershkrimi = $_POST['pershkrimi'];
+    
+    if ($medikamentet->create()) {
+        $msg = "Medikamenti u shtua!";
+        header("Location: dashboard.php?tab=medikamentet");
+        exit;
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -190,6 +232,7 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'users';
         <a href="?tab=appointments" class="<?php echo $active_tab == 'appointments' ? 'active' : ''; ?>">Appointments</a>
         <a href="?tab=abonimet" class="<?php echo $active_tab == 'abonimet' ? 'active' : ''; ?>">Subscriptions</a>
         <a href="?tab=doktoret" class="<?php echo $active_tab == 'doktoret' ? 'active' : ''; ?>">Doctors</a>
+        <a href="?tab=medikamentet" class="<?php echo $active_tab == 'medikamentet' ? 'active' : ''; ?>">Medikamentet</a>
         <a href="index.php">Back to Home</a>
         <a href="logout.php" style="color: #dc3545; margin-top: 40px;">Logout</a>
     </div>
@@ -320,7 +363,6 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'users';
 <?php endif; ?>
 
 
-
         <?php if ($active_tab == 'users' && !$edit_user): ?>
             <h1>Manage Users</h1>
             <div class="table-container">
@@ -359,6 +401,18 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'users';
 
         <?php elseif ($active_tab == 'appointments' && !$edit_termin): ?>
             <h1>Manage Appointments</h1>
+
+            <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                <a href="?tab=appointments" class="btn-save" style="padding: 10px 20px; margin-right: 10px;"> All</a>
+                <a href="?tab=appointments&filter=<?= date('Y-m-d') ?>" class="btn-save" style="padding: 10px 20px; margin-right: 10px; background: #28a745;"> Today (<?= date('d/m/Y') ?>)</a>
+            <?php if(isset($_GET['filter'])): ?>
+                <span style="background: #e9ecef; padding: 8px 12px; border-radius: 20px; font-size: 14px;">
+                Showing: <?= date('d/m/Y', strtotime($_GET['filter'])) ?>
+                <a href="?tab=appointments" style="margin-left: 10px; color: #dc3545;">✕ Clear</a>
+                </span>
+            <?php endif; ?>
+            </div>
+
             <div class="table-container">
                 <table>
                     <thead>
@@ -374,7 +428,11 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'users';
                     </thead>
                     <tbody>
                         <?php
-                        $stmt = $terminet->readAll();
+                            if (isset($_GET['filter']) && !empty($_GET['filter'])) {
+                            $stmt = $terminet->readFilteredByDate($_GET['filter']);
+                        } else {
+                            $stmt = $terminet->readAll();
+                        }
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             echo "<tr>";
                             echo "<td>{$row['id']}</td>";
@@ -430,7 +488,7 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'users';
             </div>
             <?php endif; ?>
 
-                        <?php if ($active_tab == 'doktoret' && !$edit_doktor): ?>
+                <?php if ($active_tab == 'doktoret' && !$edit_doktor): ?>
                 <h1>Manage Doctors</h1>
                 <a href="?tab=add_doktor" class="btn-save" style="margin-bottom: 20px; display: inline-block;">Add New Doctor</a>
                 <div class="table-container">
@@ -496,12 +554,102 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'users';
                             <button type="submit" name="create_doktor" class="btn-save">Add Doctor</button>
                             <a href="dashboard.php?tab=doktoret" class="btn-cancel">Cancel</a>
                         </form>
-                    </div>
+                    </div>   
+
             <?php endif; ?>
 
+           <?php if ($active_tab == 'medikamentet'): ?>
+            <?php if (!$edit_medikament && !isset($_GET['add_medikament'])): ?>
+            <h1>Manage Medikamentet</h1>
+            <a href="?tab=medikamentet&add_medikament=1" class="btn-save" style="margin-bottom: 20px; display: inline-block;">Shto Medikament të Ri</a>
+            <div class="table-container">
+                <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Emri</th>
+                        <th>Doza</th>
+                        <th>Çmimi</th>
+                        <th>Përshkrimi</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $stmt = $medikamentet->read();
+                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                        echo "<tr>";
+                        echo "<td>{$row['id']}</td>";
+                        echo "<td>{$row['emri']}</td>";
+                        echo "<td>{$row['doza']}</td>";
+                        echo "<td>€{$row['cmimi']}</td>";
+                        echo "<td>{$row['pershkrimi']}</td>";
+                        echo "<td>";
+                        echo "<a href='?tab=medikamentet&edit_medikament={$row['id']}' class='btn-edit'>Edit</a>";
+                        echo "<a href='?delete_medikament={$row['id']}' class='btn-delete' onclick='return confirm(\"Jeni të sigurt?\")'>Delete</a>";
+                        echo "</td>";
+                        echo "</tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
 
+    <?php if ($edit_medikament): ?>
+    <div class="edit-form-container">
+        <h3>Edit Medikament: <?= $edit_medikament->emri ?></h3>
+        <form method="POST" action="dashboard.php?tab=medikamentet">
+            <input type="hidden" name="medikament_id" value="<?= $edit_medikament->id ?>">
+            <div class="form-group">
+                <label>Emri</label>
+                <input type="text" name="emri" value="<?= $edit_medikament->emri ?>" required>
+            </div>
+            <div class="form-group">
+                <label>Doza</label>
+                <input type="text" name="doza" value="<?= $edit_medikament->doza ?>" required>
+            </div>
+            <div class="form-group">
+                <label>Çmimi (€)</label>
+                <input type="number" step="0.01" name="cmimi" value="<?= $edit_medikament->cmimi ?>" required>
+            </div>
+            <div class="form-group">
+                <label>Përshkrimi</label>
+                <textarea name="pershkrimi" rows="3"><?= $edit_medikament->pershkrimi ?></textarea>
+            </div>
+            <button type="submit" name="update_medikament" class="btn-save">Save Changes</button>
+            <a href="dashboard.php?tab=medikamentet" class="btn-cancel">Cancel</a>
+        </form>
+    </div>
+    <?php endif; ?>
 
-
+        <?php if (isset($_GET['add_medikament'])): ?>
+            <h1>Shto Medikament të Ri</h1>
+            <div class="edit-form-container" style="max-width: 600px; margin: auto;">
+                <form method="POST" action="dashboard.php?tab=medikamentet">
+                <div class="form-group">
+                    <label>Emri</label>
+                    <input type="text" name="emri" required>
+                </div>
+                <div class="form-group">
+                    <label>Doza</label>
+                    <input type="text" name="doza" required>
+                </div>
+                <div class="form-group">
+                    <label>Çmimi (€)</label>
+                    <input type="number" step="0.01" name="cmimi" required>
+                </div>
+                <div class="form-group">
+                    <label>Përshkrimi</label>
+                    <textarea name="pershkrimi" rows="3"></textarea>
+                </div>
+                <button type="submit" name="create_medikament" class="btn-save">Shto Medikament</button>
+                <a href="dashboard.php?tab=medikamentet" class="btn-cancel">Cancel</a>
+                </form>
+            </div>
+        <?php endif; ?>
+    <?php endif; ?>
+           
     </div>
 </div>
 

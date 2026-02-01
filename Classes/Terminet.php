@@ -69,6 +69,16 @@ class Terminet {
         return false;
     }
 
+    public function readFilteredByDate($date) {
+        $query = "SELECT * FROM " . $this->table_name . " 
+              WHERE DATE(appointment_date) = :date 
+              ORDER BY appointment_time ASC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':date', $date);
+        $stmt->execute();
+        return $stmt;
+    }
+
     public function update() {
         $query = "UPDATE " . $this->table_name . "
                   SET fullname=:fullname, email=:email, phone=:phone,

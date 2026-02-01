@@ -2,9 +2,11 @@
 session_start();
 require_once 'classes/Database.php';
 require_once 'classes/Terminet.php';
+require_once 'Classes/Doktoret.php';
 
 $database = new Database();
 $db = $database ->getConnection();
+$doktoret = new Doktoret($db);
 
 $message = '';
 if ($_POST) {
@@ -98,11 +100,13 @@ if ($_POST) {
             <div class="row">
                 <input type="tel" name="phone" placeholder="Nr. Telefonit">
                 <select name="doctor" required>
-                    <option value="">Zgjidh Doktorin</option>
-                    <option>Nazmi Kolgeci - Mjek Përgjithshëm</option>
-                    <option>Dr. Sara Gashi - Dentiste</option>
-                    <option>Dr. Besnik Krasniqi - Ortoped</option>
-                    <option>Dr. Ahmed Morina - Pediatër</option>
+                    <?php 
+                    $doktor_stmt = $doktoret->read();
+                    while($doktor_row = $doktor_stmt->fetch(PDO::FETCH_ASSOC)) {
+                        $selected = $edit_termin->doctor == $doktor_row['emri'].' '.$doktor_row['mbiemri'] ? 'selected' : '';
+                        echo "<option value=\"{$doktor_row['emri']} {$doktor_row['mbiemri']}\" $selected>{$doktor_row['emri']} {$doktor_row['mbiemri']} ({$doktor_row['specializimi']})</option>";
+                    }
+                    ?>
                 </select>
             </div>
 
