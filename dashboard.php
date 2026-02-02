@@ -197,300 +197,328 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_medikament'])) 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .btn-edit { background: #ffc107; color: #000; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 14px; margin-right: 5px; }
-        .btn-edit:hover { background: #e0a800; }
-        
-        .edit-form-container { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-left: 5px solid var(--primary); }
-        .edit-form-container h3 { margin-top: 0; color: var(--primary); }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-        .form-group input, .form-group select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
-        .btn-save { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; }
-        .btn-cancel { background: #6c757d; color: white; text-decoration: none; padding: 10px 20px; border-radius: 4px; margin-left: 10px; }
-        
-        .dashboard-container { display: flex; min-height: 100vh; }
-        .sidebar { width: 250px; background: var(--dark); color: white; padding: 20px; flex-shrink: 0;}
-        .sidebar a { display: block; color: #ccc; padding: 12px; text-decoration: none; margin-bottom: 10px; }
-        .sidebar a.active, .sidebar a:hover { background: rgba(255,255,255,0.1); color: white; }
-        .main-content { flex-grow: 1; padding: 40px; background: #f4f6f9; }
-        .table-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #eee; }
-        .btn-delete { background: #dc3545; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 14px; }
-        .badge { padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; }
-        .badge-admin { background: #d4edda; color: #155724; }
-        .badge-user { background: #e2e3e5; color: #383d41; }
-    </style>
 </head>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggleBtn = document.querySelector('.dashboard-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.dashboard-overlay');
+
+        if (toggleBtn) {
+            // Open/Close menu
+            toggleBtn.addEventListener('click', function () {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            });
+
+            // Close when clicking overlay
+            overlay.addEventListener('click', function () {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            // Close menu when clicking a link
+            sidebar.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function () {
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.remove('active');
+                        overlay.classList.remove('active');
+                    }
+                });
+            });
+        }
+    });
+</script>
+
+
+
 <body>
 
-<div class="dashboard-container">
-    <div class="sidebar">
-        <h2>Admin Panel</h2>
-        <a href="?tab=users" class="<?php echo $active_tab == 'users' ? 'active' : ''; ?>">Users</a>
-        <a href="?tab=appointments" class="<?php echo $active_tab == 'appointments' ? 'active' : ''; ?>">Appointments</a>
-        <a href="?tab=abonimet" class="<?php echo $active_tab == 'abonimet' ? 'active' : ''; ?>">Subscriptions</a>
-        <a href="?tab=doktoret" class="<?php echo $active_tab == 'doktoret' ? 'active' : ''; ?>">Doctors</a>
-        <a href="?tab=medikamentet" class="<?php echo $active_tab == 'medikamentet' ? 'active' : ''; ?>">Medikamentet</a>
-        <a href="index.php">Back to Home</a>
-        <a href="logout.php" style="color: #dc3545; margin-top: 40px;">Logout</a>
-    </div>
+    <div class="dashboard-overlay"></div>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <h2>Admin Panel</h2>
+            <a href="?tab=users" class="<?php echo $active_tab == 'users' ? 'active' : ''; ?>">Users</a>
+            <a href="?tab=appointments"
+                class="<?php echo $active_tab == 'appointments' ? 'active' : ''; ?>">Appointments</a>
+            <a href="?tab=abonimet" class="<?php echo $active_tab == 'abonimet' ? 'active' : ''; ?>">Subscriptions</a>
+            <a href="?tab=doktoret" class="<?php echo $active_tab == 'doktoret' ? 'active' : ''; ?>">Doctors</a>
+            <a href="?tab=medikamentet"
+                class="<?php echo $active_tab == 'medikamentet' ? 'active' : ''; ?>">Medikamentet</a>
+            <a href="index.php">Back to Home</a>
+            <a href="logout.php" style="color: #dc3545; margin-top: 40px;">Logout</a>
+        </div>
 
-    <div class="main-content">
-        <?php if(isset($msg)) echo "<div style='background: #d4edda; color: #155724; padding: 10px; margin-bottom: 20px; border-radius: 4px;'>$msg</div>"; ?>
+        <div class="main-content">
+            <button class="dashboard-toggle">☰</button>
+            <?php if (isset($msg))
+                echo "<div style='background: #d4edda; color: #155724; padding: 10px; margin-bottom: 20px; border-radius: 4px;'>$msg</div>"; ?>
 
-        <?php if ($edit_user): ?>
-        <div class="edit-form-container">
-            <h3>Edit User: <?php echo $edit_user->perdoruesi; ?></h3>
-            <form method="POST" action="dashboard.php?tab=users">
-                <input type="hidden" name="user_id" value="<?php echo $edit_user->id; ?>">
-                <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" name="username" value="<?php echo $edit_user->perdoruesi; ?>" required>
+            <?php if ($edit_user): ?>
+                <div class="edit-form-container">
+                    <h3>Edit User: <?php echo $edit_user->perdoruesi; ?></h3>
+                    <form method="POST" action="dashboard.php?tab=users">
+                        <input type="hidden" name="user_id" value="<?php echo $edit_user->id; ?>">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" name="username" value="<?php echo $edit_user->perdoruesi; ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" value="<?php echo $edit_user->email; ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Role</label>
+                            <select name="role">
+                                <option value="user" <?php echo $edit_user->role == 'user' ? 'selected' : ''; ?>>User</option>
+                                <option value="admin" <?php echo $edit_user->role == 'admin' ? 'selected' : ''; ?>>Admin
+                                </option>
+                            </select>
+                        </div>
+                        <button type="submit" name="update_user" class="btn-save">Save Changes</button>
+                        <a href="dashboard.php?tab=users" class="btn-cancel">Cancel</a>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" name="email" value="<?php echo $edit_user->email; ?>" required>
-                </div>
-                <div class="form-group">
-                    <label>Role</label>
-                    <select name="role">
-                        <option value="user" <?php echo $edit_user->role == 'user' ? 'selected' : ''; ?>>User</option>
-                        <option value="admin" <?php echo $edit_user->role == 'admin' ? 'selected' : ''; ?>>Admin</option>
-                    </select>
-                </div>
-                <button type="submit" name="update_user" class="btn-save">Save Changes</button>
-                <a href="dashboard.php?tab=users" class="btn-cancel">Cancel</a>
-            </form>
-        </div>
-        <?php endif; ?>
+            <?php endif; ?>
 
-        <?php if ($edit_termin): ?>
-        <div class="edit-form-container">
-            <h3>Edit Appointment</h3>
-            <form method="POST" action="dashboard.php?tab=appointments">
-                <input type="hidden" name="termin_id" value="<?php echo $edit_termin->id; ?>">
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" name="fullname" value="<?php echo $edit_termin->fullname; ?>" required>
+            <?php if ($edit_termin): ?>
+                <div class="edit-form-container">
+                    <h3>Edit Appointment</h3>
+                    <form method="POST" action="dashboard.php?tab=appointments">
+                        <input type="hidden" name="termin_id" value="<?php echo $edit_termin->id; ?>">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" name="fullname" value="<?php echo $edit_termin->fullname; ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" value="<?php echo $edit_termin->email; ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="text" name="phone" value="<?php echo $edit_termin->phone; ?>">
+                        </div>
+                        <div class="form-group">
+                            <label>Doctor</label>
+                            <select name="doctor">
+                                <option value="Dr. Ali" <?php echo $edit_termin->doctor == 'Dr. Ali' ? 'selected' : ''; ?>>Dr.
+                                    Ali</option>
+                                <option value="Dr. Ayse" <?php echo $edit_termin->doctor == 'Dr. Ayse' ? 'selected' : ''; ?>>
+                                    Dr. Ayse</option>
+                                <option value="Dr. Fatbardh" <?php echo $edit_termin->doctor == 'Dr. Fatbardh' ? 'selected' : ''; ?>>Dr. Fatbardh</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" name="date" value="<?php echo $edit_termin->appointment_date; ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Time</label>
+                            <input type="time" name="time" value="<?php echo $edit_termin->appointment_time; ?>" required>
+                        </div>
+                        <button type="submit" name="update_termin" class="btn-save">Save Changes</button>
+                        <a href="dashboard.php?tab=appointments" class="btn-cancel">Cancel</a>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" name="email" value="<?php echo $edit_termin->email; ?>" required>
+            <?php endif; ?>
+            <?php if ($edit_abonim): ?>
+                <div class="edit-form-container">
+                    <h3>Edit Subscription</h3>
+                    <form method="POST" action="dashboard.php?tab=abonimet">
+                        <input type="hidden" name="abonim_id" value="<?php echo $edit_abonim->id; ?>">
+                        <div class="form-group">
+                            <label>Package</label>
+                            <input type="text" name="pako" value="<?php echo $edit_abonim->pako; ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Price</label>
+                            <input type="number" step="0.01" name="cmimi" value="<?php echo $edit_abonim->cmimi; ?>"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select name="status">
+                                <option value="aktiv" <?php echo $edit_abonim->status == 'aktiv' ? 'selected' : ''; ?>>Active
+                                </option>
+                                <option value="skaduar" <?php echo $edit_abonim->status == 'skaduar' ? 'selected' : ''; ?>>
+                                    Expired</option>
+                                <option value="anuluar" <?php echo $edit_abonim->status == 'anuluar' ? 'selected' : ''; ?>>
+                                    Canceled</option>
+                            </select>
+                        </div>
+                        <button type="submit" name="update_abonim" class="btn-save">Save Changes</button>
+                        <a href="dashboard.php?tab=abonimet" class="btn-cancel">Cancel</a>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <label>Phone</label>
-                    <input type="text" name="phone" value="<?php echo $edit_termin->phone; ?>">
-                </div>
-                <div class="form-group">
-                    <label>Doctor</label>
-                    <select name="doctor">
-                        <option value="Dr. Ali" <?php echo $edit_termin->doctor == 'Dr. Ali' ? 'selected' : ''; ?>>Dr. Ali</option>
-                        <option value="Dr. Ayse" <?php echo $edit_termin->doctor == 'Dr. Ayse' ? 'selected' : ''; ?>>Dr. Ayse</option>
-                        <option value="Dr. Fatbardh" <?php echo $edit_termin->doctor == 'Dr. Fatbardh' ? 'selected' : ''; ?>>Dr. Fatbardh</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Date</label>
-                    <input type="date" name="date" value="<?php echo $edit_termin->appointment_date; ?>" required>
-                </div>
-                <div class="form-group">
-                    <label>Time</label>
-                    <input type="time" name="time" value="<?php echo $edit_termin->appointment_time; ?>" required>
-                </div>
-                <button type="submit" name="update_termin" class="btn-save">Save Changes</button>
-                <a href="dashboard.php?tab=appointments" class="btn-cancel">Cancel</a>
-            </form>
-        </div>
-        <?php endif; ?>
-        <?php if ($edit_abonim): ?>
-        <div class="edit-form-container">
-            <h3>Edit Subscription</h3>
-            <form method="POST" action="dashboard.php?tab=abonimet">
-                <input type="hidden" name="abonim_id" value="<?php echo $edit_abonim->id; ?>">
-                <div class="form-group">
-                    <label>Package</label>
-                    <input type="text" name="pako" value="<?php echo $edit_abonim->pako; ?>" required>
-                </div>
-                <div class="form-group">
-                    <label>Price</label>
-                    <input type="number" step="0.01" name="cmimi" value="<?php echo $edit_abonim->cmimi; ?>" required>
-                </div>
-                <div class="form-group">
-                    <label>Status</label>
-                    <select name="status">
-                        <option value="aktiv" <?php echo $edit_abonim->status == 'aktiv' ? 'selected' : ''; ?>>Active</option>
-                        <option value="skaduar" <?php echo $edit_abonim->status == 'skaduar' ? 'selected' : ''; ?>>Expired</option>
-                        <option value="anuluar" <?php echo $edit_abonim->status == 'anuluar' ? 'selected' : ''; ?>>Canceled</option>
-                    </select>
-                </div>
-                <button type="submit" name="update_abonim" class="btn-save">Save Changes</button>
-                <a href="dashboard.php?tab=abonimet" class="btn-cancel">Cancel</a>
-            </form>
-        </div>
-        <?php endif; ?>
+            <?php endif; ?>
 
-        <?php if ($edit_doktor): ?>
-<div class="edit-form-container">
-    <h3>Edit Doctor</h3>
-    <form method="POST" action="dashboard.php?tab=doktoret">
-        <input type="hidden" name="doktor_id" value="<?php echo $edit_doktor->id; ?>">
-        <div class="form-group">
-            <label>First Name</label>
-            <input type="text" name="emri" value="<?php echo $edit_doktor->emri; ?>" required>
-        </div>
-        <div class="form-group">
-            <label>Last Name</label>
-            <input type="text" name="mbiemri" value="<?php echo $edit_doktor->mbiemri; ?>" required>
-        </div>
-        <div class="form-group">
-            <label>Specialization</label>
-            <input type="text" name="specializimi" value="<?php echo $edit_doktor->specializimi; ?>" required>
-        </div>
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" name="email" value="<?php echo $edit_doktor->email; ?>" required>
-        </div>
-        <div class="form-group">
-            <label>Phone</label>
-            <input type="text" name="telefoni" value="<?php echo $edit_doktor->telefoni; ?>">
-        </div>
-        <button type="submit" name="update_doktor" class="btn-save">Save Changes</button>
-        <a href="dashboard.php?tab=doktoret" class="btn-cancel">Cancel</a>
-    </form>
-</div>
-<?php endif; ?>
+            <?php if ($edit_doktor): ?>
+                <div class="edit-form-container">
+                    <h3>Edit Doctor</h3>
+                    <form method="POST" action="dashboard.php?tab=doktoret">
+                        <input type="hidden" name="doktor_id" value="<?php echo $edit_doktor->id; ?>">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" name="emri" value="<?php echo $edit_doktor->emri; ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" name="mbiemri" value="<?php echo $edit_doktor->mbiemri; ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Specialization</label>
+                            <input type="text" name="specializimi" value="<?php echo $edit_doktor->specializimi; ?>"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" value="<?php echo $edit_doktor->email; ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="text" name="telefoni" value="<?php echo $edit_doktor->telefoni; ?>">
+                        </div>
+                        <button type="submit" name="update_doktor" class="btn-save">Save Changes</button>
+                        <a href="dashboard.php?tab=doktoret" class="btn-cancel">Cancel</a>
+                    </form>
+                </div>
+            <?php endif; ?>
 
 
-        <?php if ($active_tab == 'users' && !$edit_user): ?>
-            <h1>Manage Users</h1>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $stmt = $user->readAll();
-                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                            echo "<tr>";
-                            echo "<td>{$row['id']}</td>";
-                            echo "<td>{$row['perdoruesi']}</td>";
-                            echo "<td>{$row['email']}</td>";
-                            $roleClass = $row['role'] == 'admin' ? 'badge-admin' : 'badge-user';
-                            echo "<td><span class='badge {$roleClass}'>{$row['role']}</span></td>";
-                            echo "<td>";
-                            echo "<a href='?tab=users&edit_user={$row['id']}' class='btn-edit'>Edit</a>";
-                            if ($row['role'] != 'admin') {
-                                echo "<a href='?delete_user={$row['id']}' class='btn-delete' onclick='return confirm(\"Are you sure?\")'>Delete</a>";
+            <?php if ($active_tab == 'users' && !$edit_user): ?>
+                <h1>Manage Users</h1>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $stmt = $user->readAll();
+                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                echo "<tr>";
+                                echo "<td>{$row['id']}</td>";
+                                echo "<td>{$row['perdoruesi']}</td>";
+                                echo "<td>{$row['email']}</td>";
+                                $roleClass = $row['role'] == 'admin' ? 'badge-admin' : 'badge-user';
+                                echo "<td><span class='badge {$roleClass}'>{$row['role']}</span></td>";
+                                echo "<td>";
+                                echo "<a href='?tab=users&edit_user={$row['id']}' class='btn-edit'>Edit</a>";
+                                if ($row['role'] != 'admin') {
+                                    echo "<a href='?delete_user={$row['id']}' class='btn-delete' onclick='return confirm(\"Are you sure?\")'>Delete</a>";
+                                }
+                                echo "</td>";
+                                echo "</tr>";
                             }
-                            echo "</td>";
-                            echo "</tr>";
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
 
-        <?php elseif ($active_tab == 'appointments' && !$edit_termin): ?>
-            <h1>Manage Appointments</h1>
+            <?php elseif ($active_tab == 'appointments' && !$edit_termin): ?>
+                <h1>Manage Appointments</h1>
 
-            <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
-                <a href="?tab=appointments" class="btn-save" style="padding: 10px 20px; margin-right: 10px;"> All</a>
-                <a href="?tab=appointments&filter=<?= date('Y-m-d') ?>" class="btn-save" style="padding: 10px 20px; margin-right: 10px; background: #28a745;"> Today (<?= date('d/m/Y') ?>)</a>
-            <?php if(isset($_GET['filter'])): ?>
-                <span style="background: #e9ecef; padding: 8px 12px; border-radius: 20px; font-size: 14px;">
-                Showing: <?= date('d/m/Y', strtotime($_GET['filter'])) ?>
-                <a href="?tab=appointments" style="margin-left: 10px; color: #dc3545;">✕ Clear</a>
-                </span>
-            <?php endif; ?>
-            </div>
+                <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                    <a href="?tab=appointments" class="btn-save" style="padding: 10px 20px; margin-right: 10px;"> All</a>
+                    <a href="?tab=appointments&filter=<?= date('Y-m-d') ?>" class="btn-save"
+                        style="padding: 10px 20px; margin-right: 10px; background: #28a745;"> Today
+                        (<?= date('d/m/Y') ?>)</a>
+                    <?php if (isset($_GET['filter'])): ?>
+                        <span style="background: #e9ecef; padding: 8px 12px; border-radius: 20px; font-size: 14px;">
+                            Showing: <?= date('d/m/Y', strtotime($_GET['filter'])) ?>
+                            <a href="?tab=appointments" style="margin-left: 10px; color: #dc3545;">✕ Clear</a>
+                        </span>
+                    <?php endif; ?>
+                </div>
 
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Patient</th>
-                            <th>Doctor</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Phone</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Patient</th>
+                                <th>Doctor</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Phone</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
                             if (isset($_GET['filter']) && !empty($_GET['filter'])) {
-                            $stmt = $terminet->readFilteredByDate($_GET['filter']);
-                        } else {
-                            $stmt = $terminet->readAll();
-                        }
-                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                            echo "<tr>";
-                            echo "<td>{$row['id']}</td>";
-                            echo "<td>{$row['fullname']}</td>";
-                            echo "<td>{$row['doctor']}</td>";
-                            echo "<td>{$row['appointment_date']}</td>";
-                            echo "<td>{$row['appointment_time']}</td>";
-                            echo "<td>{$row['phone']}</td>";
-                            echo "<td>";
-                            echo "<a href='?tab=appointments&edit_termin={$row['id']}' class='btn-edit'>Edit</a>";
-                            echo "<a href='?delete_termin={$row['id']}' class='btn-delete' onclick='return confirm(\"Cancel this appointment?\")'>Delete</a>";
-                            echo "</td>";
-                            echo "</tr>";
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-        <?php endif; ?>
-        <?php if ($active_tab == 'abonimet' && !$edit_abonim): ?>
-            <h1>Manage Subscriptions</h1>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>User ID</th>
-                            <th>Package</th>
-                            <th>Price</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $stmt = $abonimet->readAll();
-                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                            echo "<tr>";
-                            echo "<td>{$row['id']}</td>";
-                            echo "<td>{$row['user_id']}</td>";
-                            echo "<td>{$row['pako']}</td>";
-                            echo "<td>{$row['cmimi']}</td>";
-                            echo "<td>{$row['status']}</td>";
-                            echo "<td>";
-                            echo "<a href='?tab=abonimet&edit_abonim={$row['id']}' class='btn-edit'>Edit</a>";
-                            echo "<a href='?delete_abonim={$row['id']}' class='btn-delete' onclick='return confirm(\"Are you sure?\")'>Delete</a>";
-                            echo "</td>";
-                            echo "</tr>";
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
+                                $stmt = $terminet->readFilteredByDate($_GET['filter']);
+                            } else {
+                                $stmt = $terminet->readAll();
+                            }
+                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                echo "<tr>";
+                                echo "<td>{$row['id']}</td>";
+                                echo "<td>{$row['fullname']}</td>";
+                                echo "<td>{$row['doctor']}</td>";
+                                echo "<td>{$row['appointment_date']}</td>";
+                                echo "<td>{$row['appointment_time']}</td>";
+                                echo "<td>{$row['phone']}</td>";
+                                echo "<td>";
+                                echo "<a href='?tab=appointments&edit_termin={$row['id']}' class='btn-edit'>Edit</a>";
+                                echo "<a href='?delete_termin={$row['id']}' class='btn-delete' onclick='return confirm(\"Cancel this appointment?\")'>Delete</a>";
+                                echo "</td>";
+                                echo "</tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
+            <?php if ($active_tab == 'abonimet' && !$edit_abonim): ?>
+                <h1>Manage Subscriptions</h1>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User ID</th>
+                                <th>Package</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $stmt = $abonimet->readAll();
+                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                echo "<tr>";
+                                echo "<td>{$row['id']}</td>";
+                                echo "<td>{$row['user_id']}</td>";
+                                echo "<td>{$row['pako']}</td>";
+                                echo "<td>{$row['cmimi']}</td>";
+                                echo "<td>{$row['status']}</td>";
+                                echo "<td>";
+                                echo "<a href='?tab=abonimet&edit_abonim={$row['id']}' class='btn-edit'>Edit</a>";
+                                echo "<a href='?delete_abonim={$row['id']}' class='btn-delete' onclick='return confirm(\"Are you sure?\")'>Delete</a>";
+                                echo "</td>";
+                                echo "</tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
             <?php endif; ?>
 
-                <?php if ($active_tab == 'doktoret' && !$edit_doktor): ?>
+            <?php if ($active_tab == 'doktoret' && !$edit_doktor): ?>
                 <h1>Manage Doctors</h1>
-                <a href="?tab=add_doktor" class="btn-save" style="margin-bottom: 20px; display: inline-block;">Add New Doctor</a>
+                <a href="?tab=add_doktor" class="btn-save" style="margin-bottom: 20px; display: inline-block;">Add New
+                    Doctor</a>
                 <div class="table-container">
                     <table>
                         <thead>
@@ -528,130 +556,132 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_medikament'])) 
             <?php endif; ?>
 
             <?php if ($active_tab == 'add_doktor'): ?>
-                    <h1>Add New Doctor</h1>
-                    <div class="edit-form-container" style="max-width: 600px; margin: auto;">
-                        <form method="POST" action="dashboard.php?tab=add_doktor">
-                            <div class="form-group">
-                                <label>First Name</label>
-                                <input type="text" name="emri" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Last Name</label>
-                                <input type="text" name="mbiemri" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Specialization</label>
-                                <input type="text" name="specializimi" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" name="email" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Phone</label>
-                                <input type="text" name="telefoni">
-                            </div>
-                            <button type="submit" name="create_doktor" class="btn-save">Add Doctor</button>
-                            <a href="dashboard.php?tab=doktoret" class="btn-cancel">Cancel</a>
-                        </form>
-                    </div>   
+                <h1>Add New Doctor</h1>
+                <div class="edit-form-container" style="max-width: 600px; margin: auto;">
+                    <form method="POST" action="dashboard.php?tab=add_doktor">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" name="emri" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" name="mbiemri" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Specialization</label>
+                            <input type="text" name="specializimi" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="text" name="telefoni">
+                        </div>
+                        <button type="submit" name="create_doktor" class="btn-save">Add Doctor</button>
+                        <a href="dashboard.php?tab=doktoret" class="btn-cancel">Cancel</a>
+                    </form>
+                </div>
 
             <?php endif; ?>
 
-           <?php if ($active_tab == 'medikamentet'): ?>
-            <?php if (!$edit_medikament && !isset($_GET['add_medikament'])): ?>
-            <h1>Manage Medikamentet</h1>
-            <a href="?tab=medikamentet&add_medikament=1" class="btn-save" style="margin-bottom: 20px; display: inline-block;">Shto Medikament të Ri</a>
-            <div class="table-container">
-                <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Emri</th>
-                        <th>Doza</th>
-                        <th>Çmimi</th>
-                        <th>Përshkrimi</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $stmt = $medikamentet->read();
-                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                        echo "<tr>";
-                        echo "<td>{$row['id']}</td>";
-                        echo "<td>{$row['emri']}</td>";
-                        echo "<td>{$row['doza']}</td>";
-                        echo "<td>€{$row['cmimi']}</td>";
-                        echo "<td>{$row['pershkrimi']}</td>";
-                        echo "<td>";
-                        echo "<a href='?tab=medikamentet&edit_medikament={$row['id']}' class='btn-edit'>Edit</a>";
-                        echo "<a href='?delete_medikament={$row['id']}' class='btn-delete' onclick='return confirm(\"Jeni të sigurt?\")'>Delete</a>";
-                        echo "</td>";
-                        echo "</tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
+            <?php if ($active_tab == 'medikamentet'): ?>
+                <?php if (!$edit_medikament && !isset($_GET['add_medikament'])): ?>
+                    <h1>Manage Medikamentet</h1>
+                    <a href="?tab=medikamentet&add_medikament=1" class="btn-save"
+                        style="margin-bottom: 20px; display: inline-block;">Shto Medikament të Ri</a>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Emri</th>
+                                    <th>Doza</th>
+                                    <th>Çmimi</th>
+                                    <th>Përshkrimi</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $stmt = $medikamentet->read();
+                                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                    echo "<tr>";
+                                    echo "<td>{$row['id']}</td>";
+                                    echo "<td>{$row['emri']}</td>";
+                                    echo "<td>{$row['doza']}</td>";
+                                    echo "<td>€{$row['cmimi']}</td>";
+                                    echo "<td>{$row['pershkrimi']}</td>";
+                                    echo "<td>";
+                                    echo "<a href='?tab=medikamentet&edit_medikament={$row['id']}' class='btn-edit'>Edit</a>";
+                                    echo "<a href='?delete_medikament={$row['id']}' class='btn-delete' onclick='return confirm(\"Jeni të sigurt?\")'>Delete</a>";
+                                    echo "</td>";
+                                    echo "</tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($edit_medikament): ?>
+                    <div class="edit-form-container">
+                        <h3>Edit Medikament: <?= $edit_medikament->emri ?></h3>
+                        <form method="POST" action="dashboard.php?tab=medikamentet">
+                            <input type="hidden" name="medikament_id" value="<?= $edit_medikament->id ?>">
+                            <div class="form-group">
+                                <label>Emri</label>
+                                <input type="text" name="emri" value="<?= $edit_medikament->emri ?>" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Doza</label>
+                                <input type="text" name="doza" value="<?= $edit_medikament->doza ?>" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Çmimi (€)</label>
+                                <input type="number" step="0.01" name="cmimi" value="<?= $edit_medikament->cmimi ?>" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Përshkrimi</label>
+                                <textarea name="pershkrimi" rows="3"><?= $edit_medikament->pershkrimi ?></textarea>
+                            </div>
+                            <button type="submit" name="update_medikament" class="btn-save">Save Changes</button>
+                            <a href="dashboard.php?tab=medikamentet" class="btn-cancel">Cancel</a>
+                        </form>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (isset($_GET['add_medikament'])): ?>
+                    <h1>Shto Medikament të Ri</h1>
+                    <div class="edit-form-container" style="max-width: 600px; margin: auto;">
+                        <form method="POST" action="dashboard.php?tab=medikamentet">
+                            <div class="form-group">
+                                <label>Emri</label>
+                                <input type="text" name="emri" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Doza</label>
+                                <input type="text" name="doza" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Çmimi (€)</label>
+                                <input type="number" step="0.01" name="cmimi" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Përshkrimi</label>
+                                <textarea name="pershkrimi" rows="3"></textarea>
+                            </div>
+                            <button type="submit" name="create_medikament" class="btn-save">Shto Medikament</button>
+                            <a href="dashboard.php?tab=medikamentet" class="btn-cancel">Cancel</a>
+                        </form>
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
+
         </div>
-    <?php endif; ?>
-
-    <?php if ($edit_medikament): ?>
-    <div class="edit-form-container">
-        <h3>Edit Medikament: <?= $edit_medikament->emri ?></h3>
-        <form method="POST" action="dashboard.php?tab=medikamentet">
-            <input type="hidden" name="medikament_id" value="<?= $edit_medikament->id ?>">
-            <div class="form-group">
-                <label>Emri</label>
-                <input type="text" name="emri" value="<?= $edit_medikament->emri ?>" required>
-            </div>
-            <div class="form-group">
-                <label>Doza</label>
-                <input type="text" name="doza" value="<?= $edit_medikament->doza ?>" required>
-            </div>
-            <div class="form-group">
-                <label>Çmimi (€)</label>
-                <input type="number" step="0.01" name="cmimi" value="<?= $edit_medikament->cmimi ?>" required>
-            </div>
-            <div class="form-group">
-                <label>Përshkrimi</label>
-                <textarea name="pershkrimi" rows="3"><?= $edit_medikament->pershkrimi ?></textarea>
-            </div>
-            <button type="submit" name="update_medikament" class="btn-save">Save Changes</button>
-            <a href="dashboard.php?tab=medikamentet" class="btn-cancel">Cancel</a>
-        </form>
     </div>
-    <?php endif; ?>
-
-        <?php if (isset($_GET['add_medikament'])): ?>
-            <h1>Shto Medikament të Ri</h1>
-            <div class="edit-form-container" style="max-width: 600px; margin: auto;">
-                <form method="POST" action="dashboard.php?tab=medikamentet">
-                <div class="form-group">
-                    <label>Emri</label>
-                    <input type="text" name="emri" required>
-                </div>
-                <div class="form-group">
-                    <label>Doza</label>
-                    <input type="text" name="doza" required>
-                </div>
-                <div class="form-group">
-                    <label>Çmimi (€)</label>
-                    <input type="number" step="0.01" name="cmimi" required>
-                </div>
-                <div class="form-group">
-                    <label>Përshkrimi</label>
-                    <textarea name="pershkrimi" rows="3"></textarea>
-                </div>
-                <button type="submit" name="create_medikament" class="btn-save">Shto Medikament</button>
-                <a href="dashboard.php?tab=medikamentet" class="btn-cancel">Cancel</a>
-                </form>
-            </div>
-        <?php endif; ?>
-    <?php endif; ?>
-           
-    </div>
-</div>
 
 </body>
+
 </html>

@@ -63,7 +63,7 @@
 
                 <div>
                     <h2 class="title">Rreth Qendrës sonë Mjekësore</h2>
-                    <p class="subtitle">>Ofrojmë shërbime të kujdesit shëndetësor me cilësi të lartë për çdo pacient</p>
+                    <p class="subtitle">Ofrojmë shërbime të kujdesit shëndetësor me cilësi të lartë për çdo pacient</p>
 
                     <p>
                         Qendra jonë mjekësore është e përkushtuar të ofrojë shërbime të jashtëzakonshme shëndetësore, duke kombinuar teknologjinë e avancuar, stafin profesional dhe një qasje të ndjeshme ndaj pacientit.
@@ -150,12 +150,12 @@
 
             <div>
                 <h4>Mediat Sociale</h4>
-                <div class="social-links">
-                    <a href="facebook.com">Facebook</a>
-                    <a href="twitter.com">X</a>
-                    <a href="linkedin.com">LinkedIn</a>
-                    <a href="instagram.com">Instagram</a>
-                </div>
+                <ul class="social-links">
+                    <li><a href="facebook.com">Facebook</a></li>
+                    <li><a href="twitter.com">X</a></li>
+                    <li><a href="linkedin.com">LinkedIn</a></li>
+                    <li><a href="instagram.com">Instagram</a></li>
+                </ul>
             </div>
 
         </div>

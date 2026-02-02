@@ -223,12 +223,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div>
                 <h4>Mediat Sociale</h4>
-                <div class="social-links">
-                    <a href="facebook.com">Facebook</a>
-                    <a href="twitter.com">X</a>
-                    <a href="linkedin.com">LinkedIn</a>
-                    <a href="instagram.com">Instagram</a>
-                </div>
+                <ul class="social-links">
+                    <li><a href="facebook.com">Facebook</a></li>
+                    <li><a href="twitter.com">X</a></li>
+                    <li><a href="linkedin.com">LinkedIn</a></li>
+                    <li><a href="instagram.com">Instagram</a></li>
+                </ul>
             </div>
 
         </div>

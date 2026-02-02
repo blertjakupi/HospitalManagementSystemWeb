@@ -55,8 +55,10 @@
         <div class="container">
             <div class="hero-content">
                 <h1>Ne Ofrojmë Zgjidhje të Plotë për Kujdesin Shëndetësor<h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi optio sit quod incidunt, eius quia, natus ipsam, voluptatibus ab voluptatem at aperiam. Deleniti esse, assumenda consequatur quidem hic vitae libero?</p>
-                <button class="btn-hero" onclick="location.href='terminet.html'">Cakto Terminin</button>
+                        <p>Në qendrën tonë, shendeti juaj është prioriteti ynë kryesor. Ofrojmë konsulta mjeksore,
+                            ekzaminime të detajuara dhe trajtim të personalizuar nga doktorë të licencuar. Besoni tek ne
+                            për kujdes cilësor dhe rezultate të shkëlqyera në çdo hap të trajtimit tuaj.</p>
+                        <button class="btn-hero" onclick="location.href='terminet.html'">Cakto Terminin</button>
             </div>
             <div class="hero-image center">
                 <div class="img-hero"><img src="Library/Doctors.png"></div>
@@ -307,12 +309,12 @@
 
             <div>
                 <h4>Mediat Sociale</h4>
-                <div class="social-links">
-                    <a href="facebook.com">Facebook</a>
-                    <a href="twitter.com">X</a>
-                    <a href="linkedin.com">LinkedIn</a>
-                    <a href="instagram.com">Instagram</a>
-                </div>
+                <ul class="social-links">
+                    <li><a href="facebook.com">Facebook</a></li>
+                    <li><a href="twitter.com">X</a></li>
+                    <li><a href="linkedin.com">LinkedIn</a></li>
+                    <li><a href="instagram.com">Instagram</a></li>
+                </ul>
             </div>
 
         </div>
