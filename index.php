@@ -112,49 +112,49 @@
 
                 <div class="slider-track" id="sliderTrack">
                     <div class="card card-hover">
-                        <div class="placeholder h-280"><img src="Library/news1.jpg" alt="Filan Fisteku"></div>
+                        <div class="placeholder h-280"><img src="Library/news1.jpg" alt="Nazmi Kolgeci"></div>
                         <div class="meta">
-                            <h4>Filan Fisteku</h4>
-                            <p class="text-muted">Mjek i Përgjithshëm</p>
+                            <h4>Nazmi Kolgeci</h4>
+                            <p class="text-muted">Kirurg Torakal</p>
                         </div>
                     </div>
 
                     <div class="card card-hover">
-                        <div class="placeholder h-280"><img src="Library/12.jpg" alt="John Doe"></div>
+                        <div class="placeholder h-280"><img src="Library/12.jpg" alt="Fatmire Berisha"></div>
                         <div class="meta">
-                            <h4>John Doe</h4>
-                            <p class="text-muted">Kardiologe</p>
+                            <h4>Fatmire Berisha</h4>
+                            <p class="text-muted">Dentiste</p>
                         </div>
                     </div>
 
                     <div class="card card-hover">
-                        <div class="placeholder h-280"><img src="Library/news3.jpg" alt="Filane Fisteku"></div>
+                        <div class="placeholder h-280"><img src="Library/news3.jpg" alt="Fatmir Ramadani"></div>
                         <div class="meta">
-                            <h4>Filane Fisteku</h4>
-                            <p class="text-muted">Kirurge</p>
+                            <h4>Fatmir Ramadani</h4>
+                            <p class="text-muted">Kardiolog</p>
                         </div>
                     </div>
 
                     <div class="card card-hover">
                         <div class="placeholder h-280"><img src="Library/6.jpg" alt="Dr. Ahmed"></div>
                         <div class="meta">
-                            <h4>Dr. Ahmed Morina</h4>
+                            <h4>Ahmed Morina</h4>
                             <p class="text-muted">Pediatër</p>
                         </div>
                     </div>
 
                     <div class="card card-hover">
-                        <div class="placeholder h-280"><img src="Library/11.jpg" alt="Dr. Sara"></div>
+                        <div class="placeholder h-280"><img src="Library/11.jpg" alt="Kastriot Llugagjiu"></div>
                         <div class="meta">
-                            <h4>Dr. Sara Gashi</h4>
-                            <p class="text-muted">Dentiste</p>
+                            <h4>Kastriot Llugagjiu</h4>
+                            <p class="text-muted">Radiolog</p>
                         </div>
                     </div>
 
                     <div class="card card-hover">
                         <div class="placeholder h-280"><img src="Library/10.jpg" alt="Dr. Besnik"></div>
                         <div class="meta">
-                            <h4>Dr. Besnik Krasniqi</h4>
+                            <h4>Besnik Krasniqi</h4>
                             <p class="text-muted">Ortoped</p>
                         </div>
                     </div>
