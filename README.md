@@ -6,3 +6,7 @@ Punoi:
         Edi Ramadani
         Shpat Hashani
 
+
+DB NAME : medical_db
+https://github.com/blertjakupi/HospitalManagementSystemWeb
+
