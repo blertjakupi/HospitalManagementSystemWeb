@@ -1,44 +1,46 @@
-:root{
-  --primary:#17a2b8;
-  --primary-dark:#138496;
-  --surface:#fff;
-  --muted:#666;
-  --bg:#f8f9fa;
-  --dark:#1f2d3d;
-  --text:#333;
-  --radius:8px;
+:root {
+    --primary: #17a2b8;
+    --primary-dark: #138496;
+    --surface: #fff;
+    --muted: #666;
+    --bg: #f8f9fa;
+    --dark: #1f2d3d;
+    --text: #333;
+    --radius: 8px;
 }
 
-*
-{
-  box-sizing:border-box;
-  margin:0;
-  padding:0
-}
-html,body
-{
-  font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  color:var(--text);
-  background:var(--surface);
-  line-height:1.6;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0
 }
 
-.container
-{
-    max-width:1200px;
-    margin:0 auto;
-    padding:0 16px;
+html,
+body {
+    font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color: var(--text);
+    background: var(--surface);
+    line-height: 1.6;
 }
-.section{
-    padding:32px 16px;
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
 }
-.center{
-    display:flex;
-    align-items:center;
-    justify-content:center;
+
+.section {
+    padding: 32px 16px;
 }
-.text-center{
-    text-align:center;
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text-center {
+    text-align: center;
 }
 
 .about .grid-2 {
@@ -46,7 +48,7 @@ html,body
     align-items: center;
 }
 
-.about .grid-2 > div:first-child {
+.about .grid-2>div:first-child {
     display: flex;
     justify-content: center;
     padding: 0 16px;

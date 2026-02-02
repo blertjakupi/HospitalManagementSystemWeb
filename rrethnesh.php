@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <!-- duhet me rregullu style.css per krejt imazhet -->
     <meta charset="UTF-8">
@@ -7,9 +8,10 @@
     <title>Medical - Health Management</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <?php
-        if (session_status() === PHP_SESSION_NONE) {
+    if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
 
@@ -66,11 +68,14 @@
                     <p class="subtitle">Ofrojmë shërbime të kujdesit shëndetësor me cilësi të lartë për çdo pacient</p>
 
                     <p>
-                        Qendra jonë mjekësore është e përkushtuar të ofrojë shërbime të jashtëzakonshme shëndetësore, duke kombinuar teknologjinë e avancuar, stafin profesional dhe një qasje të ndjeshme ndaj pacientit.
+                        Qendra jonë mjekësore është e përkushtuar të ofrojë shërbime të jashtëzakonshme shëndetësore,
+                        duke kombinuar teknologjinë e avancuar, stafin profesional dhe një qasje të ndjeshme ndaj
+                        pacientit.
                     </p>
 
                     <p>
-                        Ne fokusohemi në kujdesin e orientuar drejt pacientit, duke siguruar rehati, siguri dhe kënaqësi në çdo hap të udhëtimit tuaj shëndetësor.
+                        Ne fokusohemi në kujdesin e orientuar drejt pacientit, duke siguruar rehati, siguri dhe kënaqësi
+                        në çdo hap të udhëtimit tuaj shëndetësor.
                     </p>
 
                     <ul class="about-list">
@@ -106,15 +111,15 @@
                 </div>
 
                 <div class="card card-hover">
-                   <div class="icon-box">🤝</div>
-                   <h3>Besimi</h3>
+                    <div class="icon-box">🤝</div>
+                    <h3>Besimi</h3>
                     <p class="text-muted">Ne ndërtojmë marrëdhënie të forta me pacientët tanë.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    
+
     <footer>
         <div class="footer-row">
 
@@ -164,7 +169,8 @@
             <p>&copy; 2025 WEB UBT. All rights reserved. | Privacy Policy | Terms & Conditions| </p>
         </div>
     </footer>
-    
+
     <script src="script.js"></script>
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <!-- duhet me rregullu style.css per krejt imazhet -->
     <meta charset="UTF-8">
@@ -7,9 +8,10 @@
     <title>Medical - Health Management</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <?php
-        if (session_status() === PHP_SESSION_NONE) {
+    if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
 
@@ -67,7 +69,7 @@
     </section>
 
     <section class="features section">
-        
+
         <div class="container">
             <div class="grid grid-4">
                 <div class="card feature-box card hover">
@@ -98,15 +100,16 @@
         <div class="container text-center">
             <h2 class="title">Ekipi</h2>
             <p class="subtitle">Njoftohuni me doktorët tanë të perkushtuar</p>
-             <!-- Slider -->
+            <!-- Slider -->
             <div class="team-slider">
                 <!-- Shigjeta Majtas -->
                 <button class="slider-btn slider-prev" onclick="moveSlide(-1)">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                 </button>
-            
+
                 <div class="slider-track" id="sliderTrack">
                     <div class="card card-hover">
                         <div class="placeholder h-280"><img src="Library/news1.jpg" alt="Filan Fisteku"></div>
@@ -156,15 +159,16 @@
                         </div>
                     </div>
                 </div>
-            
+
                 <button class="slider-btn slider-next" onclick="moveSlide(1)">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                 </button>
             </div>
-        
-        <div class="slider-dots" id="sliderDots"></div>
+
+            <div class="slider-dots" id="sliderDots"></div>
         </div>
     </section>
 
@@ -323,8 +327,9 @@
             <p>&copy; 2025 WEB UBT. All rights reserved. | Privacy Policy | Terms & Conditions| </p>
         </div>
     </footer>
-    
+
     <script src="slider.js"></script>
     <script src="script.js"></script>
 </body>
+
 </html>

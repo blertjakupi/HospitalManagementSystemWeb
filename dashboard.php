@@ -43,8 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_user'])) {
     $user->perdoruesi = $_POST['username'];
     $user->email = $_POST['email'];
     $user->role = $_POST['role'];
-    
-    if($user->update()) {
+
+    if ($user->update()) {
         $msg = "User updated successfully!";
     }
 }
@@ -57,8 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_termin'])) {
     $terminet->doctor = $_POST['doctor'];
     $terminet->appointment_date = $_POST['date'];
     $terminet->appointment_time = $_POST['time'];
-    
-    if($terminet->update()) {
+
+    if ($terminet->update()) {
         $msg = "Appointment updated successfully!";
     }
 }
@@ -169,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_medikament'])) 
     $medikamentet->doza = $_POST['doza'];
     $medikamentet->cmimi = $_POST['cmimi'];
     $medikamentet->pershkrimi = $_POST['pershkrimi'];
-    
+
     if ($medikamentet->update()) {
         $msg = "Medikamenti u përditësua!";
     }
@@ -180,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_medikament'])) 
     $medikamentet->doza = $_POST['doza'];
     $medikamentet->cmimi = $_POST['cmimi'];
     $medikamentet->pershkrimi = $_POST['pershkrimi'];
-    
+
     if ($medikamentet->create()) {
         $msg = "Medikamenti u shtua!";
         header("Location: dashboard.php?tab=medikamentet");
@@ -192,6 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_medikament'])) 
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
